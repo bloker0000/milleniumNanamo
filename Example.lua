@@ -1,4 +1,4 @@
-local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/bloker0000/milleniumrc2/refs/heads/main/Library.lua"))()
+local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/bloker0000/milleniumNanamo/refs/heads/main/Library.lua"))()
 
 --[[
   This ui uses a column way of creating holders for sections, its a bit confusing for newbies so heres an easy explanation:
@@ -8,7 +8,7 @@ local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/bloke
   Also I haven't even got a clue how this got leaked since loads of people had it.
 ]]
 
-local window = library:window({name = "nebula", suffix = "tech", gameInfo = "Milenium for Counter-Strike: Global Offensive"})
+local window = library:window({name = "naramo", suffix = "hub", gameInfo = "Millenium for Naramo Nuclear Plant"})
 
 window:seperator({name = "General"})
 local enemies, teammates, self_section = window:tab({name = "Example", tabs = {"Enemies", "Teammates", "Self"}})

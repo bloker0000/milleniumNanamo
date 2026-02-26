@@ -1,1 +1,1 @@
-made for a refinery caves 2 script, library made by i77lhm
+Millenium GUI library customized for the Naramo Nuclear Plant script. Library originally made by i77lhm.
