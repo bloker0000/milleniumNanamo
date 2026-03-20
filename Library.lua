@@ -78,7 +78,6 @@
         connections = {},   
         notifications = {notifs = {}},
         current_open;
-        _loading_config = false; 
     }
 
     local themes = {
@@ -401,7 +400,6 @@
         end
 
         function library:load_config(config_json) 
-            library._loading_config = true
             local config = http_service:JSONDecode(config_json)
             
             for _, v in config do 
@@ -412,16 +410,20 @@
                 end
 
                 if function_set then 
-                    if type(v) == "table" and v["Transparency"] and v["Color"] then
-                        function_set(hex(v["Color"]), v["Transparency"])
-                    elseif type(v) == "table" and v["active"] ~= nil then 
-                        function_set(v)
-                    else
-                        function_set(v)
+                    local ok, err = pcall(function()
+                        if type(v) == "table" and v["Transparency"] and v["Color"] then
+                            function_set(hex(v["Color"]), v["Transparency"])
+                        elseif type(v) == "table" and v["active"] ~= nil then 
+                            function_set(v)
+                        else
+                            function_set(v)
+                        end
+                    end)
+                    if not ok then
+                        warn("[Config] Failed to load flag '" .. tostring(_) .. "': " .. tostring(err))
                     end
                 end 
             end 
-            library._loading_config = false
         end 
         
         function library:round(number, float) 
@@ -3594,7 +3596,7 @@
             local section = column:section({name = "Settings", side = "right", size = 1, default = true, icon = "rbxassetid://129380150574313"})
             section:textbox({name = "Config name:", flag = "config_name_text"})
             section:button({name = "Save", callback = function() local cfgName = flags["config_name_text"] or flags["config_name_list"] or "default"; writefile(library.directory .. "/configs/" .. cfgName .. ".cfg", library:get_config()); library:update_config_list(); notifications:create_notification({name = "Configs", info = "Saved config to:\n" .. cfgName}) end})
-            section:button({name = "Load", callback = function() local cfgName = flags["config_name_list"] or "default"; local ok, err = pcall(function() library:load_config(readfile(library.directory .. "/configs/" .. cfgName .. ".cfg")) end); if ok then library:update_config_list(); notifications:create_notification({name = "Configs", info = "Loaded config:\n" .. cfgName}) else notifications:create_notification({name = "Configs", info = "Failed to load: " .. cfgName}) end end})
+            section:button({name = "Load", callback = function() local cfgName = flags["config_name_list"] or "default"; local ok, err = pcall(function() library:load_config(readfile(library.directory .. "/configs/" .. cfgName .. ".cfg")) end); if ok then library:update_config_list(); notifications:create_notification({name = "Configs", info = "Loaded config:\n" .. cfgName}) else notifications:create_notification({name = "Configs", info = "Failed to load:\n" .. tostring(err)}) end end})
             section:button({name = "Delete", callback = function() local cfgName = flags["config_name_list"] or "default"; pcall(function() delfile(library.directory .. "/configs/" .. cfgName .. ".cfg") end); library:update_config_list(); notifications:create_notification({name = "Configs", info = "Deleted config:\n" .. cfgName}) end})
             section:colorpicker({name = "Menu Accent", callback = function(color, alpha) library:update_theme("accent", color) end, color = themes.preset.accent})
             section:keybind({name = "Menu Bind", key = Enum.KeyCode.End, callback = function(bool) window.toggle_menu(bool) end, default = true})
