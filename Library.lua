@@ -1661,7 +1661,7 @@
                     library:tween(items[ "circle" ], {BackgroundColor3 = bool and rgb(255, 255, 255) or rgb(86, 86, 88), Position = bool and dim2(1, -14, 0, 2) or dim2(0, 2, 0, 2)}, Enum.EasingStyle.Quad)
                 end
 
-                if not cfg._initializing and not library._loading_config then
+                if not cfg._initializing then
                     cfg.callback(bool)
                 end
 
@@ -3232,7 +3232,7 @@
                     cfg.set_mode(cfg.mode) 
                 end 
 
-                if not cfg._initializing and not cfg._rebinding and not library._loading_config then
+                if not cfg._initializing and not cfg._rebinding then
                     cfg.callback(cfg.active)
                 end
 
